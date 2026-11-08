@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"main/internal/app"
 	"main/internal/exceptions"
-	"net/http"
-	"reflect"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -15,43 +13,42 @@ import (
 func Getting(c *app.Context) {
 	c.Log().Info("", zap.String("Method", c.Request.Method))
 
-	c.JSON(http.StatusOK, gin.H{"method": "GET"})
+	c.Body = &gin.H{"method": "GET"}
 }
 
 func Posting(c *app.Context) {
 	c.Log().Info("Posting")
-	// name := c.PostForm("name")
-	// age := c.PostForm("age")
-	age := c.PostFormMap("age")
 	body, err := c.GetRawData()
 	if err != nil {
 		fmt.Println("未获取 data")
 	}
-	var data interface{}
+	var data gin.H
 	json.Unmarshal(body, &data)
-	fmt.Println("data: ", data)
-	fmt.Println("age: ", age)
-	fmt.Println("age: ", reflect.TypeOf(age))
-	// c.JSON(http.StatusOK, gin.H{"method": "POST"})
-	c.Data(200, "application/json", body)
+	if err != nil {
+		// 读取失败（客户端断开、body 过大等）
+	} else {
+		c.Body = &data
+	}
 }
 
 func Putting(c *app.Context) {
 	c.Log().Info("Putting")
-	c.JSON(http.StatusOK, gin.H{"method": "PUT"})
+	c.Body = &gin.H{"method": "PUT"}
 }
 
 func Deleting(c *app.Context) {
 	c.Log().Info("Deleting")
-	c.JSON(http.StatusOK, gin.H{"method": "DELETE", "test": "6"})
+	c.Body = &gin.H{"method": "DELETE"}
 }
 
 func Patching(c *app.Context) {
 	c.Log().Info("Patching")
-	c.JSON(http.StatusOK, gin.H{"method": "PATCH"})
+	c.Body = &gin.H{"method": "PATCH"}
 }
 func GetError(c *app.Context) {
 	c.Log().Info("GetError")
+	c.Body = &gin.H{"method": "PUT"}
 	c.Error(exceptions.ErrNotFound)
-
+	// log.Fatal("抛出异常")
+	panic(fmt.Errorf("doSomething failed:"))
 }

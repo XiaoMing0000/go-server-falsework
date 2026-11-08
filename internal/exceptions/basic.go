@@ -12,7 +12,8 @@ func (e *AppError) Error() string {
 }
 
 var (
-	ErrNotFound     = &AppError{Status: 404, Code: 1000404, Message: "resource not found"}
-	ErrUnauthorized = &AppError{Status: 401, Code: 1000401, Message: "authentication required"}
-	ErrBadRequest   = &AppError{Status: 400, Code: 1000400, Message: "invalid request"}
+	ErrNotFound       = &AppError{Status: 200, Code: 1000404, Message: "resource not found"}
+	ErrUnauthorized   = &AppError{Status: 200, Code: 1000401, Message: "authentication required"}
+	ErrBadRequest     = &AppError{Status: 200, Code: 1000400, Message: "invalid request"}
+	ErrInternalServer = &AppError{Status: 500, Code: 1000500, Message: "Internal server error"}
 )
