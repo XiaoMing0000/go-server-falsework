@@ -1,0 +1,63 @@
+#:schema https://json.schemastore.org/any.json
+
+env_files = []
+root = "."
+testdata_dir = "testdata"
+tmp_dir = "tmp"
+
+[build]
+  args_bin = []
+  bin = "./tmp/main"
+  # -N -l 关闭优化和内联，否则断点无法命中或错位（调试必需）
+  cmd = 'CGO_ENABLED=0 go build -gcflags="all=-N -l" -o ./tmp/main ./cmd/server'
+  delay = 1000
+  entrypoint = ["./tmp/main"]
+  exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+  exclude_file = []
+  exclude_regex = ["_test.go"]
+  exclude_unchanged = false
+  follow_symlink = false
+  # 不能只写 "dlv"：非交互环境里 ~/go/bin 通常不在 PATH 上。
+  # air 用 /bin/sh -c 执行本行，所以这里可以展开 $()。
+  # --headless --accept-multiclient 让 VS Code 可以随时 attach；--continue 保证不调试时服务照常启动。
+  full_bin = 'exec "$(go env GOPATH)/bin/dlv" exec ./tmp/main --headless --listen=127.0.0.1:2345 --api-version=2 --accept-multiclient --continue --log'
+  ignore_dangerous_root_dir = false
+  include_dir = []
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  include_file = []
+  kill_delay = "0s"
+  log = "build-errors.log"
+  poll = false
+  poll_interval = 0
+  post_cmd = []
+  pre_cmd = []
+  rerun = false
+  rerun_delay = 500
+  send_interrupt = false
+  stop_on_error = false
+
+[color]
+  app = ""
+  build = "yellow"
+  main = "magenta"
+  mode = ""
+  runner = "green"
+  watcher = "cyan"
+
+[log]
+  main_only = false
+  silent = false
+  time = false
+
+[misc]
+  clean_on_exit = false
+
+[proxy]
+  app_port = 0
+  app_start_timeout = 0
+  enabled = false
+  proxy_port = 0
+
+[screen]
+  clear_on_rebuild = false
+  keep_scroll = true

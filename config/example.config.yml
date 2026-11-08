@@ -1,0 +1,21 @@
+# 服务配置
+server:
+  host: 127.0.0.1
+  port: 80
+  name: app
+  logLevel: info 可以用 debug、info、warn、error、dpanic、panic、fatal
+  logDir: ./logs
+  logMaxAge: 7 # 单位 day
+  session:
+    sec: xxxxxx
+    name: APP-SESSION
+    lastLang: 604800 # session 最大时长
+
+# 配置数据库
+db:
+  type: 
+  host: 
+  port: 
+  user: 
+  password: 
+  database: 
