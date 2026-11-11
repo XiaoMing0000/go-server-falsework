@@ -32,7 +32,7 @@ func Trace() func(c *app.Context) {
 
 		c.SetTraceId(traceID)
 		// 给上下文注册日志
-		c.SetLog(app.Logger().With(zap.String(traceIDField, traceID)))
+		c.SetLogger(app.Logger().With(zap.String(traceIDField, traceID)))
 		c.Header(traceIDHeader, traceID)
 
 		c.Next()
