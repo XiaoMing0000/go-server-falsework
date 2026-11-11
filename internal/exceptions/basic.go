@@ -1,5 +1,7 @@
 package exceptions
 
+import "net/http"
+
 // AppError represents a structured API error.
 type AppError struct {
 	Status  int    `json:"-"`
@@ -9,6 +11,14 @@ type AppError struct {
 
 func (e *AppError) Error() string {
 	return e.Message
+}
+
+func HttpError(httpStatus int) *AppError {
+	return &AppError{
+		Status:  httpStatus,
+		Code:    uint32(httpStatus),
+		Message: http.StatusText(httpStatus),
+	}
 }
 
 var (
